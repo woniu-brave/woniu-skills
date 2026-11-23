@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>规格与选型｜详情页模板</title>
+  <style>
+:root {
+  color-scheme: light;
+  background: #e9e6de;
+  font: 16px/1.45 "Microsoft YaHei", "PingFang SC", sans-serif;
+  color: #272828;
+}
+* { box-sizing: border-box; }
+body, h1, h2, h3, p, ul, ol, figure { margin: 0; }
+.controls { padding: 10px 18px; display: flex; justify-content:center; }
+.controls button { cursor:pointer; background:#fffdfa; border:1px solid #827e72; color:#292823; padding:7px 16px; font:inherit; }
+.board {
+  width: min(100%, 1200px); margin:auto; padding: 36px max(22px,3.1%);
+  background: #f3f0e8; display:grid; gap:26px;
+}
+.header {
+  display:flex; justify-content:space-between; align-items:end; flex-wrap:wrap; gap:22px;
+  border-top: 4px solid var(--ink); padding-top:17px;
+}
+.header h1 { font-size: 50px; font-weight: 800; letter-spacing: -.06em; line-height:1.06; }
+.header p { font-size:14px; margin-top:8px; }
+.header .count { font-weight:750; color:white; background:var(--ink); padding:4px 9px; display:inline-block; margin-right:3px; }
+.swatches { display:flex; gap:5px; list-style:none; padding:0; }
+.swatches li { display:grid; gap:4px; font:11px/1 Consolas,monospace; }
+.swatches span { display:block; height:15px; min-width:47px; background:var(--chip); border:1px solid rgb(30 29 26 /.14); }
+.pages { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:23px 19px; }
+.page { min-width:0; border:1px solid #c7c4ba; background:#fffdfa; }
+.page-label { padding:10px 12px; display:flex; align-items:center; gap:8px; min-height:45px; }
+.page-label p { font-size:15px; font-weight:750; line-height:1.2; }
+.page-label .number { font:700 13px/1 Consolas,monospace; color:#fffdfa; background:var(--ink); padding:5px 7px; }
+.sheet { container-type:inline-size; width:100%; }
+.panel {
+  position: relative; isolation: isolate; display: flex; flex-direction: column;
+  flex: var(--weight,1) 1 0; min-height: 0; gap: 3.5cqw;
+  padding: 5cqw 5.5cqw; background: var(--paper); color: #252829;
+}
+.panel+.panel { border-top: 1px solid #aaa99f; }
+.panel.soft { background: var(--soft); }
+.panel.deep { background: var(--ink); color: #fffdfa; }
+.panel.gradient {
+  background: linear-gradient(135deg, var(--paper) 62%, var(--soft) 62%);
+}
+.panel.tint { background: var(--shape); }
+.copy { display: grid; gap: 1.5cqw; flex: 0 0 auto; }
+.panel h3 { font-size: 7.3cqw; line-height: 1.12; letter-spacing: -.045em; overflow-wrap: anywhere; }
+.panel.hero h3 { font-size: 11.8cqw; line-height: 1.02; }
+.panel p { font-size: 3.8cqw; line-height: 1.38; }
+.panel .overline { font-size: 3.45cqw; letter-spacing: .13em; font-weight: 700; }
+.panel .caption { font-size: 3.45cqw; }
+.panel .slot {
+  display: grid; place-items: center; flex: 1 1 0; min-height: 0;
+  padding: 2.2cqw; text-align: center; font-size: 3.15cqw; letter-spacing: .04em;
+  color: var(--ink); border: 1px solid color-mix(in srgb, var(--ink) 39%, transparent);
+  background: repeating-linear-gradient(-36deg,transparent 0,transparent 10px,rgb(28 27 30 / .047) 10px,rgb(28 27 30 / .047) 11px),var(--shape);
+}
+.panel .arch { clip-path: polygon(0 0, calc(100% - 12cqw) 0, 100% 12cqw, 100% 100%, 0 100%); }
+.panel .oval { border-radius: 0; border-top: 2.5px solid var(--ink); }
+.panel .edge { margin-inline: -5.5cqw; border-left: 0; border-right: 0; }
+.panel .outline { background-color: var(--paper); border-style: dashed; }
+.panel.deep .slot, .panel.tint .slot { background-color: var(--soft); }
+.panel .two, .panel .three { display: grid; min-height: 0; flex: 1; gap: 2.5cqw; grid-template-columns: repeat(2,minmax(0,1fr)); }
+.panel .three { grid-template-columns: repeat(3,minmax(0,1fr)); }
+.panel .raised .slot:nth-child(2) { margin-top: 5.5cqw; }
+.panel .twin .slot:nth-child(2) { background-color: var(--paper); }
+.panel .bar {
+  flex: 0 0 auto; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
+  border-block: 1px solid currentColor; padding-block: 2.2cqw; gap: 1.3cqw; font-size: 3.45cqw;
+}
+.panel .table { width: 100%; border-collapse: collapse; text-align: left; font-size: 3.6cqw; }
+.panel .table th, .panel .table td { padding: 1.3cqw 1.2cqw; border-bottom: 1px solid color-mix(in srgb,currentColor 45%,transparent); }
+.panel .table th { background: var(--soft); }
+.panel .steps { flex: 1; min-height: 0; display: grid; grid-auto-rows: minmax(0,1fr); gap: 2cqw; list-style: none; padding: 0; }
+.panel .steps li { display: grid; align-items: center; grid-template-columns: minmax(0,1fr) minmax(0,1.05fr); gap: 2.3cqw; font-size: 3.75cqw; }
+.panel .steps .slot { height: 100%; }
+.panel .pill { align-self: start; border-left: 1px solid currentColor; padding-left: 2cqw; }
+.panel .inset { color: #252829; background: var(--paper); padding: 2.8cqw; border-left: 2px solid var(--ink); }
+.panel .floating { align-self: start; margin-top: -6cqw; z-index: 1; }
+.panel .right { text-align: right; }
+.panel .center { text-align: center; }
+.panel .stacked { display: grid; min-height: 0; flex: 1; grid-template-rows: 2fr 1fr; gap: 2.5cqw; }
+.panel .list { list-style: none; padding: 0; font-size: 3.5cqw; }
+.panel .list li { padding-block: 1.85cqw; border-bottom: 1px solid currentColor; }
+.board[data-style="craft"] .panel.hero .slot { clip-path: polygon(0 0,100% 0,100% 100%,15% 100%,0 85%); }
+.board[data-style="scene"] .panel.hero h3 { font-weight: 600; letter-spacing: -.06em; }
+.board[data-style="use"] .panel .outline { background-image: repeating-linear-gradient(0deg, transparent 0 12px, #28476022 12px 13px), repeating-linear-gradient(90deg, transparent 0 12px, #28476022 12px 13px); }
+.board[data-style="pack"] .panel.hero .slot { border: 2px solid var(--ink); clip-path: none; box-shadow: 3cqw 3cqw 0 var(--ink); margin-right: 3cqw; }
+.panel { width:100%; height:calc(400cqw / 3); gap:3.5cqw; overflow:clip; }
+.panel .slot { min-height:12cqw; }
+.panel .steps .slot { min-height:1px; }
+.panel .stacked .slot { min-height:0; }
+.panel .wide-shadow { box-shadow:3cqw 3cqw 0 color-mix(in srgb,var(--ink) 26%,transparent); margin-right:3cqw; }
+.panel .focus { border-left:3px solid var(--ink); background:var(--soft); padding:3.2cqw 4cqw; }
+.panel .focus strong { display:block; font-size:4.5cqw; }
+.panel .mini-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:2cqw; }
+.panel .mini-grid p { border-top:1px solid currentColor; padding-top:2cqw; }
+.panel .table { flex-shrink:0; }
+.panel .table th, .panel .table td { padding:2cqw 1.2cqw; }
+.panel.flush { padding:0; gap:0; }
+.panel.flush .copy { padding:5cqw 5.5cqw; }
+.panel .steps li { min-height:0; }
+body.long .board, body.export-pages .board { padding:0; display:block; width:100%; }
+body.long .board { max-width:375px; }
+body.long .header, body.export-pages .header, body.long .page-label, body.export-pages .page-label, body.export-pages .controls { display:none; }
+body.long .pages, body.export-pages .pages { display:block; }
+body.long .page, body.export-pages .page { border:0; }
+body.long .page+.page { box-shadow:0 -1px 0 #aaa99f; }
+@media(max-width:800px) {
+  .board { padding:20px; gap:18px; }
+  .header h1 { font-size:37px; }
+  .pages { grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+  .page-label { padding:6px 8px; min-height:32px; }
+  .page-label p { font-size:13px; }
+}
+  </style>
+</head>
+<body data-panel-gallery>
+  <div class="controls">
+    <button id="view" type="button" aria-controls="layout" aria-pressed="false">查看手机长页</button>
+  </div>
+  <main id="layout" class="board" data-style="spec" style="--paper:#FAF7F2;--soft:#F0E1DB;--shape:#DBB9AA;--ink:#644334">
+    <header class="header">
+      <div>
+        <h1>规格与选型</h1>
+        <p><span class="count">12 页</span> 3:4 竖版 · 多款型、多规格商品</p>
+      </div>
+      <ul class="swatches" aria-label="参考色板"><li><span style="--chip:#FAF7F2"></span>#FAF7F2</li><li><span style="--chip:#F0E1DB"></span>#F0E1DB</li><li><span style="--chip:#DBB9AA"></span>#DBB9AA</li><li><span style="--chip:#644334"></span>#644334</li></ul>
+    </header>
+    <div class="pages">
+      <section class="page" aria-label="第 1 页 规格总览">
+        <header class="page-label"><span class="number">01</span><p>规格总览</p></header>
+        <div class="sheet">
+          <article class="panel hero gradient" data-export-id="hero">
+          <header class="copy "><p class="overline">规格总览</p><h3>标题<br>选型问题</h3><p>适合的位置、人数或组合。</p></header>
+          <div class="slot edge">多款并排主图</div>
+        </article>
+        </div>
+      </section>
+      <section class="page" aria-label="第 2 页 选型所需条件">
+        <header class="page-label"><span class="number">02</span><p>选型所需条件</p></header>
+        <div class="sheet">
+          <article class="panel tint" data-export-id="selection">
+          <header class="copy "><h3>选前确认</h3></header>
+          <div class="bar"><span>位置</span><span>用途</span></div>
+          <p class="caption">用真实空间或使用条件做判断。</p>
+          <div class="slot outline">商品与可用空间的关系图</div><p class="focus"><strong>按三项条件核对</strong>把可用位置、预留空间和使用方式写清楚。</p>
+        </article>
+        </div>
+      </section>
+      <section class="page" aria-label="第 3 页 款型索引">
+        <header class="page-label"><span class="number">03</span><p>款型索引</p></header>
+        <div class="sheet">
+          <article class="panel " data-export-id="models">
+          <header class="copy "><h3>款型索引</h3></header>
+          <div class="three "><div class="slot ">规格一</div><div class="slot ">规格二</div><div class="slot ">规格三</div></div>
+        </article>
+        </div>
+      </section>
+      <section class="page" aria-label="第 4 页 同角度并列">
+        <header class="page-label"><span class="number">04</span><p>同角度并列</p></header>
+        <div class="sheet">
+          <article class="panel soft" data-export-id="comparison">
+          <header class="copy "><h3>同角度并列</h3><p>同一尺寸单位和拍摄条件。</p></header>
+          <div class="two twin"><div class="slot ">小规格商品图</div><div class="slot ">大规格商品图</div></div>
+          <div class="bar"><span>款型一</span><span>款型二</span></div>
+        </article>
+        </div>
+      </section>
+      <section class="page" aria-label="第 5 页 参数对照">
+        <header class="page-label"><span class="number">05</span><p>参数对照</p></header>
+        <div class="sheet">
+          <article class="panel " data-export-id="data">
+          <header class="copy "><h3>该比较哪些数据</h3></header>
+          <table class="table"><thead><tr><th scope="col">项目</th><th scope="col">款型一</th><th scope="col">款型二</th></tr></thead><tbody><tr><td>外宽</td><td>实测</td><td>实测</td></tr><tr><td>深度</td><td>实测</td><td>实测</td></tr><tr><td>高度</td><td>实测</td><td>实测</td></tr><tr><td>容量</td><td>核实</td><td>核实</td></tr></tbody></table>
+          <div class="slot outline">图中标明与表格一致的尺寸运算位置</div>
+        </article>
+        </div>
+      </section>
+      <section class="page" aria-label="第 6 页 怎么选择">
+        <header class="page-label"><span class="number">06</span><p>怎么选择</p></header>
+        <div class="sheet">
+          <article class="panel deep" data-export-id="guidance">
+          <header class="copy "><h3>一句选型提示</h3></header>
+          <p class="caption">写清用户换规格时需要重新确认的条件。</p>
+          <div class="two"><div class="slot ">空间较窄时</div><div class="slot ">可用空间较大时</div></div><p class="focus"><strong>同时满足放得下和取用方便</strong>沿同一视角拍两款，图下标明各自的实测条件。</p>
+        </article>
+        </div>
+      </section>
+      <section class="page" aria-label="第 7 页 测量位置">
+        <header class="page-label"><span class="number">07</span><p>测量位置</p></header>
+        <div class="sheet">
+          <article class="panel tint" data-export-id="measure">
+          <header class="copy "><h3>标注测量位置</h3><p>统一单位和测量起点。</p></header>
+          <div class="slot outline">正侧面尺寸示意</div>
+          <div class="bar"><span>起点</span><span>终点</span><span>单位</span></div>
+        </article>
+        </div>
+      </section>
+      <section class="page" aria-label="第 8 页 不同空间试摆">
+        <header class="page-label"><span class="number">08</span><p>不同空间试摆</p></header>
+        <div class="sheet">
+          <article class="panel " data-export-id="placement">
+          <header class="copy "><h3>按使用空间选择</h3></header>
+          <div class="two raised"><div class="slot ">窄位摆放</div><div class="slot ">宽位摆放</div></div>
+        </article>
+        </div>
+      </section>
+      <section class="page" aria-label="第 9 页 开合与预留">
+        <header class="page-label"><span class="number">09</span><p>开合与预留</p></header>
+        <div class="sheet">
+          <article class="panel soft" data-export-id="clearance">
+          <header class="copy "><h3>给留白多一点位置</h3><p>提示打开、取用或安装所需的额外空间。</p></header>
+          <div class="two"><div class="slot ">静置尺寸</div><div class="slot ">开盖或拉出状态</div></div>
+        </article>
+        </div>
+      </section>
+      <section class="page" aria-label="第 10 页 实际售卖范围">
+        <header class="page-label"><span class="number">10</span><p>实际售卖范围</p></header>
+        <div class="sheet">
+          <article class="panel deep flush" data-export-id="included">
+          <div class="slot ">商品和随附件全图</div>
+          <header class="copy "><h3>实售范围</h3><p>区分商品、随附与陈列。</p></header>
+        </article>
+        </div>
+      </section>
+      <section class="page" aria-label="第 11 页 收到后核对">
+        <header class="page-label"><span class="number">11</span><p>收到后核对</p></header>
+        <div class="sheet">
+          <article class="panel soft" data-export-id="check-parts">
+          <header class="copy "><h3>收到后核对</h3></header>
+          <ul class="list"><li>款式或型号</li><li>实际数量</li><li>随附物件</li></ul>
+          <div class="slot ">收到的商品、随附件和标签位置</div>
+        </article>
+        </div>
+      </section>
+      <section class="page" aria-label="第 12 页 型号确认">
+        <header class="page-label"><span class="number">12</span><p>型号确认</p></header>
+        <div class="sheet">
+          <article class="panel " data-export-id="closing">
+          <div class="two "><div class="slot ">标准外观</div><div class="slot ">商品标识</div></div>
+          <header class="copy "><h3>确认再选择</h3><p>按实售型号和已核实信息收尾。</p></header>
+        </article>
+        </div>
+      </section>
+    </div>
+  </main>
+  <script>
+    const button = document.getElementById("view");
+    button.addEventListener("click", () => {
+      const long = document.body.classList.toggle("long");
+      button.textContent = long ? "查看逐页总览" : "查看手机长页";
+      button.setAttribute("aria-pressed", String(long));
+      window.scrollTo(0, 0);
+    });
+  </script>
+</body>
+</html>

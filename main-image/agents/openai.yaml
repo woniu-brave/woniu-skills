@@ -1,0 +1,4 @@
+interface:
+  display_name: "Main Image"
+  short_description: "规划并制作各类商品的电商主图与成套图片"
+  default_prompt: "使用 $main-image 根据这些商品图片制作一套电商主图。"

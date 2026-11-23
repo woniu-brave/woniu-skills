@@ -1,0 +1,4 @@
+interface:
+  display_name: "Detail Images"
+  short_description: "规划并制作可编辑的电商详情页和分屏成品图"
+  default_prompt: "使用 $detail-images 根据商品图片和资料制作一套电商详情页。"

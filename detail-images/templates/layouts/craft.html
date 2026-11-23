@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>外观与工艺｜详情页模板</title>
+  <style>
+:root {
+  color-scheme: light;
+  background: #e9e6de;
+  font: 16px/1.45 "Microsoft YaHei", "PingFang SC", sans-serif;
+  color: #272828;
+}
+* { box-sizing: border-box; }
+body, h1, h2, h3, p, ul, ol, figure { margin: 0; }
+.controls { padding: 10px 18px; display: flex; justify-content:center; }
+.controls button { cursor:pointer; background:#fffdfa; border:1px solid #827e72; color:#292823; padding:7px 16px; font:inherit; }
+.board {
+  width: min(100%, 1200px); margin:auto; padding: 36px max(22px,3.1%);
+  background: #f3f0e8; display:grid; gap:26px;
+}
+.header {
+  display:flex; justify-content:space-between; align-items:end; flex-wrap:wrap; gap:22px;
+  border-top: 4px solid var(--ink); padding-top:17px;
+}
+.header h1 { font-size: 50px; font-weight: 800; letter-spacing: -.06em; line-height:1.06; }
+.header p { font-size:14px; margin-top:8px; }
+.header .count { font-weight:750; color:white; background:var(--ink); padding:4px 9px; display:inline-block; margin-right:3px; }
+.swatches { display:flex; gap:5px; list-style:none; padding:0; }
+.swatches li { display:grid; gap:4px; font:11px/1 Consolas,monospace; }
+.swatches span { display:block; height:15px; min-width:47px; background:var(--chip); border:1px solid rgb(30 29 26 /.14); }
+.pages { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:23px 19px; }
+.page { min-width:0; border:1px solid #c7c4ba; background:#fffdfa; }
+.page-label { padding:10px 12px; display:flex; align-items:center; gap:8px; min-height:45px; }
+.page-label p { font-size:15px; font-weight:750; line-height:1.2; }
+.page-label .number { font:700 13px/1 Consolas,monospace; color:#fffdfa; background:var(--ink); padding:5px 7px; }
+.sheet { container-type:inline-size; width:100%; }
+.panel {
+  position: relative; isolation: isolate; display: flex; flex-direction: column;
+  flex: var(--weight,1) 1 0; min-height: 0; gap: 3.5cqw;
+  padding: 5cqw 5.5cqw; background: var(--paper); color: #252829;
+}
+.panel+.panel { border-top: 1px solid #aaa99f; }
+.panel.soft { background: var(--soft); }
+.panel.deep { background: var(--ink); color: #fffdfa; }
+.panel.gradient {
+  background: linear-gradient(135deg, var(--paper) 62%, var(--soft) 62%);
+}
+.panel.tint { background: var(--shape); }
+.copy { display: grid; gap: 1.5cqw; flex: 0 0 auto; }
+.panel h3 { font-size: 7.3cqw; line-height: 1.12; letter-spacing: -.045em; overflow-wrap: anywhere; }
+.panel.hero h3 { font-size: 11.8cqw; line-height: 1.02; }
+.panel p { font-size: 3.8cqw; line-height: 1.38; }
+.panel .overline { font-size: 3.45cqw; letter-spacing: .13em; font-weight: 700; }
+.panel .caption { font-size: 3.45cqw; }
+.panel .slot {
+  display: grid; place-items: center; flex: 1 1 0; min-height: 0;
+  padding: 2.2cqw; text-align: center; font-size: 3.15cqw; letter-spacing: .04em;
+  color: var(--ink); border: 1px solid color-mix(in srgb, var(--ink) 39%, transparent);
+  background: repeating-linear-gradient(-36deg,transparent 0,transparent 10px,rgb(28 27 30 / .047) 10px,rgb(28 27 30 / .047) 11px),var(--shape);
+}
+.panel .arch { clip-path: polygon(0 0, calc(100% - 12cqw) 0, 100% 12cqw, 100% 100%, 0 100%); }
+.panel .oval { border-radius: 0; border-top: 2.5px solid var(--ink); }
+.panel .edge { margin-inline: -5.5cqw; border-left: 0; border-right: 0; }
+.panel .outline { background-color: var(--paper); border-style: dashed; }
+.panel.deep .slot, .panel.tint .slot { background-color: var(--soft); }
+.panel .two, .panel .three { display: grid; min-height: 0; flex: 1; gap: 2.5cqw; grid-template-columns: repeat(2,minmax(0,1fr)); }
+.panel .three { grid-template-columns: repeat(3,minmax(0,1fr)); }
+.panel .raised .slot:nth-child(2) { margin-top: 5.5cqw; }
+.panel .twin .slot:nth-child(2) { background-color: var(--paper); }
+.panel .bar {
+  flex: 0 0 auto; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
+  border-block: 1px solid currentColor; padding-block: 2.2cqw; gap: 1.3cqw; font-size: 3.45cqw;
+}
+.panel .table { width: 100%; border-collapse: collapse; text-align: left; font-size: 3.6cqw; }
+.panel .table th, .panel .table td { padding: 1.3cqw 1.2cqw; border-bottom: 1px solid color-mix(in srgb,currentColor 45%,transparent); }
+.panel .table th { background: var(--soft); }
+.panel .steps { flex: 1; min-height: 0; display: grid; grid-auto-rows: minmax(0,1fr); gap: 2cqw; list-style: none; padding: 0; }
+.panel .steps li { display: grid; align-items: center; grid-template-columns: minmax(0,1fr) minmax(0,1.05fr); gap: 2.3cqw; font-size: 3.75cqw; }
+.panel .steps .slot { height: 100%; }
+.panel .pill { align-self: start; border-left: 1px solid currentColor; padding-left: 2cqw; }
+.panel .inset { color: #252829; background: var(--paper); padding: 2.8cqw; border-left: 2px solid var(--ink); }
+.panel .floating { align-self: start; margin-top: -6cqw; z-index: 1; }
+.panel .right { text-align: right; }
+.panel .center { text-align: center; }
+.panel .stacked { display: grid; min-height: 0; flex: 1; grid-template-rows: 2fr 1fr; gap: 2.5cqw; }
+.panel .list { list-style: none; padding: 0; font-size: 3.5cqw; }
+.panel .list li { padding-block: 1.85cqw; border-bottom: 1px solid currentColor; }
+.board[data-style="craft"] .panel.hero .slot { clip-path: polygon(0 0,100% 0,100% 100%,15% 100%,0 85%); }
+.board[data-style="scene"] .panel.hero h3 { font-weight: 600; letter-spacing: -.06em; }
+.board[data-style="use"] .panel .outline { background-image: repeating-linear-gradient(0deg, transparent 0 12px, #28476022 12px 13px), repeating-linear-gradient(90deg, transparent 0 12px, #28476022 12px 13px); }
+.board[data-style="pack"] .panel.hero .slot { border: 2px solid var(--ink); clip-path: none; box-shadow: 3cqw 3cqw 0 var(--ink); margin-right: 3cqw; }
+.panel { width:100%; height:calc(400cqw / 3); gap:3.5cqw; overflow:clip; }
+.panel .slot { min-height:12cqw; }
+.panel .steps .slot { min-height:1px; }
+.panel .stacked .slot { min-height:0; }
+.panel .wide-shadow { box-shadow:3cqw 3cqw 0 color-mix(in srgb,var(--ink) 26%,transparent); margin-right:3cqw; }
+.panel .focus { border-left:3px solid var(--ink); background:var(--soft); padding:3.2cqw 4cqw; }
+.panel .focus strong { display:block; font-size:4.5cqw; }
+.panel .mini-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:2cqw; }
+.panel .mini-grid p { border-top:1px solid currentColor; padding-top:2cqw; }
+.panel .table { flex-shrink:0; }
+.panel .table th, .panel .table td { padding:2cqw 1.2cqw; }
+.panel.flush { padding:0; gap:0; }
+.panel.flush .copy { padding:5cqw 5.5cqw; }
+.panel .steps li { min-height:0; }
+body.long .board, body.export-pages .board { padding:0; display:block; width:100%; }
+body.long .board { max-width:375px; }
+body.long .header, body.export-pages .header, body.long .page-label, body.export-pages .page-label, body.export-pages .controls { display:none; }
+body.long .pages, body.export-pages .pages { display:block; }
+body.long .page, body.export-pages .page { border:0; }
+body.long .page+.page { box-shadow:0 -1px 0 #aaa99f; }
+@media(max-width:800px) {
+  .board { padding:20px; gap:18px; }
+  .header h1 { font-size:37px; }
+  .pages { grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+  .page-label { padding:6px 8px; min-height:32px; }
+  .page-label p { font-size:13px; }
+}
+  </style>
+</head>
+<body data-panel-gallery>
+  <div class="controls">
+    <button id="view" type="button" aria-controls="layout" aria-pressed="false">查看手机长页</button>
+  </div>
+  <main id="layout" class="board" data-style="craft" style="--paper:#FAF9F7;--soft:#ECEAF4;--shape:#CDCDE5;--ink:#393765">
+    <header class="header">
+      <div>
+        <h1>外观与工艺</h1>
+        <p><span class="count">12 页</span> 3:4 竖版 · 服装、鞋包与饰品</p>
+      </div>
+      <ul class="swatches" aria-label="参考色板"><li><span style="--chip:#FAF9F7"></span>#FAF9F7</li><li><span style="--chip:#ECEAF4"></span>#ECEAF4</li><li><span style="--chip:#CDCDE5"></span>#CDCDE5</li><li><span style="--chip:#393765"></span>#393765</li></ul>
+    </header>
+    <div class="pages">
+      <section class="page" aria-label="第 1 页 首屏海报">
+        <header class="page-label"><span class="number">01</span><p>首屏海报</p></header>
+        <div class="sheet">
+          <article class="panel hero gradient cover" data-export-id="hero">
+          <header class="copy "><p class="overline">首屏海报</p><h3>主标题<br>系列名</h3><p>一句款式定位</p></header>
+          <div class="slot arch">模特上身主视觉</div>
+          <p class="caption inset floating">款色名 · 一句外观描述</p>
+        </article>
+        </div>
+      </section>
+      <section class="page" aria-label="第 2 页 外观速览">
+        <header class="page-label"><span class="number">02</span><p>外观速览</p></header>
+        <div class="sheet">
+          <article class="panel " data-export-id="product-overview">
+          <header class="copy "><h3>外观一览</h3></header>
+          <div class="bar"><span>版型</span><span>面料外观</span><span>工艺</span></div>
+          <div class="slot wide-shadow">正面或上身图，保留衣身轮廓</div><p class="focus"><strong>三个要点贴近实物标注</strong>领型、衣身轮廓和关键工艺各占一处。</p>
+        </article>
+        </div>
+      </section>
+      <section class="page" aria-label="第 3 页 平铺与轮廓">
+        <header class="page-label"><span class="number">03</span><p>平铺与轮廓</p></header>
+        <div class="sheet">
+          <article class="panel soft" data-export-id="flat-lay">
+          <header class="copy "><h3>平铺与轮廓</h3><p>合适的正面、背面素材</p></header>
+          <div class="two "><div class="slot ">正面</div><div class="slot ">背面</div></div>
+        </article>
+        </div>
+      </section>
+      <section class="page" aria-label="第 4 页 核心肌理">
+        <header class="page-label"><span class="number">04</span><p>核心肌理</p></header>
+        <div class="sheet">
+          <article class="panel deep flush" data-export-id="texture">
+          <header class="copy "><p class="overline">独立卖点</p><h3>核心质感</h3><p>标题下只留一句解释</p></header>
+          <div class="slot ">织纹大特写</div>
+        </article>
+        </div>
+      </section>
+      <section class="page" aria-label="第 5 页 做工细节">
+        <header class="page-label"><span class="number">05</span><p>做工细节</p></header>
+        <div class="sheet">
+          <article class="panel " data-export-id="construction">
+          <header class="copy "><h3>工艺细节</h3></header>
+          <div class="two raised"><div class="slot ">缝合处</div><div class="slot ">收边纹样</div></div>
+          <p class="caption">每张近景配一行局部说明。</p>
+        </article>
+        </div>
+      </section>
+      <section class="page" aria-label="第 6 页 标志性局部">
+        <header class="page-label"><span class="number">06</span><p>标志性局部</p></header>
+        <div class="sheet">
+          <article class="panel soft" data-export-id="neckline">
+          <div class="slot arch">领口或门襟</div>
+          <header class="copy "><h3>把最有辨识度的细节放大</h3><p>用局部图讲清造型。</p></header>
+        </article>
+        </div>
+      </section>
+      <section class="page" aria-label="第 7 页 上身角度">
+        <header class="page-label"><span class="number">07</span><p>上身角度</p></header>
+        <div class="sheet">
+          <article class="panel tint" data-export-id="fit">
+          <header class="copy "><h3>上身角度</h3><p>同一款色、同一模特</p></header>
+          <div class="two twin"><div class="slot ">正面上身</div><div class="slot ">侧后上身</div></div>
+        </article>
+        </div>
+      </section>
+      <section class="page" aria-label="第 8 页 面料与辅料">
+        <header class="page-label"><span class="number">08</span><p>面料与辅料</p></header>
+        <div class="sheet">
+          <article class="panel " data-export-id="material-detail">
+          <div class="two "><div class="slot oval">面料</div><div class="slot oval">配件</div></div>
+          <header class="copy "><h3>细节证据</h3><p>写图中实际能看到的特征。</p></header>
+        </article>
+        </div>
+      </section>
+      <section class="page" aria-label="第 9 页 搭配示范">
+        <header class="page-label"><span class="number">09</span><p>搭配示范</p></header>
+        <div class="sheet">
+          <article class="panel gradient" data-export-id="styling">
+          <div class="slot edge">搭配主图</div>
+          <header class="copy right"><h3>搭配示范</h3><p>配饰仅作场景陈列。</p></header>
+        </article>
+        </div>
+      </section>
+      <section class="page" aria-label="第 10 页 款色展示">
+        <header class="page-label"><span class="number">10</span><p>款色展示</p></header>
+        <div class="sheet">
+          <article class="panel soft" data-export-id="colors">
+          <header class="copy "><h3>颜色选择</h3><p>统一光线和摆位</p></header>
+          <div class="three "><div class="slot ">款色一</div><div class="slot ">款色二</div><div class="slot ">款色三</div></div>
+          <p class="caption">仅在有对应素材时展示多色。</p>
+        </article>
+        </div>
+      </section>
+      <section class="page" aria-label="第 11 页 规格与洗护">
+        <header class="page-label"><span class="number">11</span><p>规格与洗护</p></header>
+        <div class="sheet">
+          <article class="panel " data-export-id="measurements">
+          <header class="copy "><h3>规格与洗护</h3><p>填入已核对的实际数据</p></header>
+          <table class="table"><thead><tr><th scope="col">尺码</th><th scope="col">胸围</th><th scope="col">衣长</th></tr></thead><tbody><tr><td>尺码一</td><td>实测</td><td>实测</td></tr><tr><td>尺码二</td><td>实测</td><td>实测</td></tr><tr><td>尺码三</td><td>实测</td><td>实测</td></tr></tbody></table>
+          <ul class="list"><li>测量位置与单位</li><li>洗护标签</li></ul>
+          <div class="slot outline">测量起止点示意</div>
+        </article>
+        </div>
+      </section>
+      <section class="page" aria-label="第 12 页 商品全貌">
+        <header class="page-label"><span class="number">12</span><p>商品全貌</p></header>
+        <div class="sheet">
+          <article class="panel deep" data-export-id="closing">
+          <header class="copy "><h3>一图看完整体</h3><p>收尾保留一处主视觉</p></header>
+          <div class="slot arch">完整商品展示</div>
+          <div class="bar"><span>款式</span><span>颜色</span></div>
+        </article>
+        </div>
+      </section>
+    </div>
+  </main>
+  <script>
+    const button = document.getElementById("view");
+    button.addEventListener("click", () => {
+      const long = document.body.classList.toggle("long");
+      button.textContent = long ? "查看逐页总览" : "查看手机长页";
+      button.setAttribute("aria-pressed", String(long));
+      window.scrollTo(0, 0);
+    });
+  </script>
+</body>
+</html>

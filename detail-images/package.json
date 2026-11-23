@@ -1,0 +1,6 @@
+{
+  "name": "detail-images-export",
+  "private": true,
+  "engines": { "node": ">=20" },
+  "dependencies": { "playwright": "1.62.1" }
+}
