@@ -15,10 +15,10 @@
 
 ## 📋 目录
 
-| 名字 | 一句话 | 讲解 |
-|---|---|---|
-| [**main-image（商品主图）**](#main-image) | 搜索首图 + 卖点副图 + 多 SKU 套图，让买家在列表里认出商品 | — |
-| [**detail-images（商品详情页）**](#detail-images) | 连续长图母版 + 7–14 屏切片，把购买疑问逐屏讲清楚 | — |
+| 名字 | 一句话 |
+|---|---|
+| [**main-image（商品主图）**](#main-image) | 搜索首图 + 卖点副图 + 多 SKU 套图，让买家在列表里认出商品 |
+| [**detail-images（商品详情页）**](#detail-images) | 连续长图母版 + 7–14 屏切片，把购买疑问逐屏讲清楚 |
 
 ---
 
@@ -144,6 +144,8 @@ WorkBuddy 系统教程：[workbuddy-yellow-book](https://github.com/woniu-brave/
 ---
 
 <div align="center">
+
+[MIT License](./LICENSE) · 自由使用 / 修改 / 再分发
 
 Made by [@woniu-brave](https://github.com/woniu-brave)
 
